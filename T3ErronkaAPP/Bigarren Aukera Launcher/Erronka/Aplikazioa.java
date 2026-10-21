@@ -24,7 +24,11 @@ public class Aplikazioa {
 	public static final String COLOR_5 = "\u001B[38;2;255;153;234m";
 	public static final String COLOR_6 = "\u001B[38;2;255;20;20m";
 	public static final String GRISF4 = "\u001B[38;2;74;74;74m";
+	public static final String VERDE_HEX = "\u001B[38;2;42;245;39m";
+	public static final String NARANJA_HEX = "\u001B[38;2;245;125;39m";
+	public static final String CELESTE_HEX = "\u001B[38;5;117m";
 
+	
 	/**
 	 * Muestra una lista simplificada de los animales registrados (solo nombre y
 	 * edad).
@@ -236,18 +240,19 @@ public class Aplikazioa {
 		// Definimos el formato para las filas de datos.
 		// %-25s = Texto alineado a la izquierda, ocupando exactamente 25 caracteres.
 		// Formato puro de texto: %-25s para la etiqueta y %8s para el precio
-		String formatoFila = "  | %-25s %8s    |\n";
+		// Modificamos el formato para recibir: [color], [texto de 25 caracteres], [reset], [precio]
+		String formatoFila = "  | %s%-25s%s %8s    |\n";
 
 		System.out.println("  +---------------------------------------+");
-		System.out.println("  |               FAKTURA                 |");
+		System.out.println("  |               "+AZUL+"FAKTURA"+RESET+"                 |");
 		System.out.println("  +---------------------------------------+");
 
-		// Convertimos los números a String y les concatenamos el símbolo €
-		System.out.printf(formatoFila, "Subtotala:", subtotala + "€");
-		System.out.printf(formatoFila, "Deskontua:", tot + "€");
+		// Pasamos las variables de color por separado
+		System.out.printf(formatoFila, NARANJA_HEX, "Subtotala:", RESET, subtotala + "€");
+		System.out.printf(formatoFila, VERDE_HEX, "Deskontua:", RESET, tot + "€");
 
 		System.out.println("  |---------------------------------------|");
-		System.out.printf(formatoFila, "Deskontuak aplikatuta:", prezioF + "€");
+		System.out.printf(formatoFila, CELESTE_HEX, "Deskontuak aplikatuta:", RESET, prezioF + "€");
 
 		System.out.println("  +---------------------------------------+");
 		System.out.println();
