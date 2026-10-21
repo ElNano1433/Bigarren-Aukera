@@ -58,8 +58,7 @@ public class Aplikazioa {
 	 * @param c Array con las edades actuales de los animales.
 	 * @return El array de edades actualizado con la nueva cifra introducida.
 	 */
-	public static String[] aldatu(String[] a, String b, String[] c) {
-		Scanner teklatua = new Scanner(System.in);
+	public static String[] aldatu(String[] a, String b, String[] c, Scanner teklatua) {
 		String adina = " ";
 		boolean balidatu = false; // Flag para controlar el bucle de validación
 
@@ -83,7 +82,6 @@ public class Aplikazioa {
 				}
 			}
 		} while (balidatu == false);
-		teklatua.close();
 		return c;
 	}
 
@@ -218,9 +216,7 @@ public class Aplikazioa {
 	 *
 	 * @param subtotala Subtotal bruto acumulado por las compras.
 	 */
-	public static void fakturaErakutsi(int subtotala) {
-		Scanner teklatua = new Scanner(System.in);
-
+	public static void fakturaErakutsi(int subtotala, Scanner teklatua) {
 		// Pregunta si el cliente ha adoptado un animal
 		System.out.println(" ");
 		System.out.println("Badaukazu hemengo animalirik adoptatuta? (B/E) ");
@@ -256,7 +252,6 @@ public class Aplikazioa {
 
 		System.out.println("  +---------------------------------------+");
 		System.out.println();
-		teklatua.close();
 
 	}
 
@@ -615,7 +610,7 @@ public class Aplikazioa {
 
 				// Si hay compras registradas, emitimos la factura final
 				if (subtotalGuztira > 0) {
-					fakturaErakutsi(subtotalGuztira);
+					fakturaErakutsi(subtotalGuztira, teklatua);
 				} else {
 					System.out.println("\nEz duzu produkturik erosi.");
 				}
@@ -725,7 +720,7 @@ public class Aplikazioa {
 						izenadina(animaliizena, adina);
 						System.out.print("Aukeratu animalia: ");
 						String adinberria = teklatua.nextLine();
-						adina = aldatu(animaliizena, adinberria, adina);
+						adina = aldatu(animaliizena, adinberria, adina, teklatua);
 						break;
 					}
 				} while (aukera3 != 4);
