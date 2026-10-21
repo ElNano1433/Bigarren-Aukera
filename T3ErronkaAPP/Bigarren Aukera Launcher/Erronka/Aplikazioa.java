@@ -60,28 +60,33 @@ public class Aplikazioa {
 	 */
 	public static String[] aldatu(String[] a, String b, String[] c, Scanner teklatua) {
 		String adina = " ";
-		boolean balidatu = false; // Flag para controlar el bucle de validación
+		boolean aurkituta = false; // Flag para controlar el bucle de validación
 
-		do {
-			// Recorremos el array para encontrar el animal indicado
-			for (int i = 0; i < a.length; i++) {
-				// Comparamos sin diferenciar mayúsculas de minúsculas
-				if (b.equalsIgnoreCase(a[i])) {
-					try {
-						System.out.print("Sartu adina berri: ");
-						adina = teklatua.nextLine();
-						// Intentamos parsear a entero para comprobar que es un número válido
-						int ad = Integer.parseInt(adina);
-						c[i] = adina; // Guardamos la nueva edad
-						balidatu = true; // Marcamos como válido para salir del bucle
-					} catch (NumberFormatException e) {
-						// Notificamos el error si no ha introducido un número
-						System.out.println("Mesedez sartu zenbaki bat.");
-						balidatu = false;
-					}
+	    for (int i = 0; i < a.length; i++) {
+	        // Evitamos errores verificando que la posición no sea null antes de comparar
+	        if (a[i] != null && b.equalsIgnoreCase(a[i])) {
+	            aurkituta = true; // ¡Lo encontramos!
+	            boolean balidatu = false;
+
+	            // 2. Solo AHORA que sabemos que el animal existe, insistimos en pedir un número válido
+	            do {
+	                try {
+	                    System.out.print("Sartu adina berri: ");
+	                    adina = teklatua.nextLine();
+	                    int ad = Integer.parseInt(adina); // Si esto falla, salta al catch
+	                    c[i] = adina; // Guarda la edad si no hubo fallo
+	                    balidatu = true; // Rompe este bucle de validación
+	                } catch (NumberFormatException e) {
+	                    System.out.println("Mesedez sartu zenbaki bat.");
+	                    // No hace falta poner balidatu = false; porque ya vale false
+	                }
+	            } while (!balidatu);
 				}
 			}
-		} while (balidatu == false);
+			
+			if (!aurkituta) {
+				System.out.println("Ez da animalia hori aurkitu");
+			}
 		return c;
 	}
 
@@ -751,8 +756,9 @@ public class Aplikazioa {
 				+ "           ` ;:       |    `--\\__,'\r\n"
 				+ "             '`      ,'\r\n"
 				+ "                  ,-'\r\n");
+        	Thread.sleep(2077);
 			System.exit(0);
-            Thread.sleep(2000);
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); 
         }
