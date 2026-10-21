@@ -58,32 +58,35 @@ public class Aplikazioa {
 	 * @param c Array con las edades actuales de los animales.
 	 * @return El array de edades actualizado con la nueva cifra introducida.
 	 */
-	public static String[] aldatu(String[] a, String b, String[] c) {
-		Scanner teklatua = new Scanner(System.in);
+	public static String[] aldatu(String[] a, String b, String[] c, Scanner teklatua) {
 		String adina = " ";
-		boolean balidatu = false; // Flag para controlar el bucle de validación
+		boolean aurkituta = false; // Flag para controlar el bucle de validación
 
-		do {
-			// Recorremos el array para encontrar el animal indicado
-			for (int i = 0; i < a.length; i++) {
-				// Comparamos sin diferenciar mayúsculas de minúsculas
-				if (b.equalsIgnoreCase(a[i])) {
-					try {
-						System.out.print("Sartu adina berri: ");
-						adina = teklatua.nextLine();
-						// Intentamos parsear a entero para comprobar que es un número válido
-						int ad = Integer.parseInt(adina);
-						c[i] = adina; // Guardamos la nueva edad
-						balidatu = true; // Marcamos como válido para salir del bucle
-					} catch (NumberFormatException e) {
-						// Notificamos el error si no ha introducido un número
-						System.out.println("Mesedez sartu zenbaki bat.");
-						balidatu = false;
-					}
+	    for (int i = 0; i < a.length; i++) {
+	        // Evitamos errores verificando que la posición no sea null antes de comparar
+	        if (a[i] != null && b.equalsIgnoreCase(a[i])) {
+	            aurkituta = true; // ¡Lo encontramos!
+	            boolean balidatu = false;
+
+	            // 2. Solo AHORA que sabemos que el animal existe, insistimos en pedir un número válido
+	            do {
+	                try {
+	                    System.out.print("Sartu adina berri: ");
+	                    adina = teklatua.nextLine();
+	                    int ad = Integer.parseInt(adina); // Si esto falla, salta al catch
+	                    c[i] = adina; // Guarda la edad si no hubo fallo
+	                    balidatu = true; // Rompe este bucle de validación
+	                } catch (NumberFormatException e) {
+	                    System.out.println("Mesedez sartu zenbaki bat.");
+	                    // No hace falta poner balidatu = false; porque ya vale false
+	                }
+	            } while (!balidatu);
 				}
 			}
-		} while (balidatu == false);
-		teklatua.close();
+			
+			if (!aurkituta) {
+				System.out.println("Ez da animalia hori aurkitu");
+			}
 		return c;
 	}
 
@@ -218,9 +221,7 @@ public class Aplikazioa {
 	 *
 	 * @param subtotala Subtotal bruto acumulado por las compras.
 	 */
-	public static void fakturaErakutsi(int subtotala) {
-		Scanner teklatua = new Scanner(System.in);
-
+	public static void fakturaErakutsi(int subtotala, Scanner teklatua) {
 		// Pregunta si el cliente ha adoptado un animal
 		System.out.println(" ");
 		System.out.println("Badaukazu hemengo animalirik adoptatuta? (B/E) ");
@@ -256,7 +257,6 @@ public class Aplikazioa {
 
 		System.out.println("  +---------------------------------------+");
 		System.out.println();
-		teklatua.close();
 
 	}
 
@@ -615,7 +615,7 @@ public class Aplikazioa {
 
 				// Si hay compras registradas, emitimos la factura final
 				if (subtotalGuztira > 0) {
-					fakturaErakutsi(subtotalGuztira);
+					fakturaErakutsi(subtotalGuztira, teklatua);
 				} else {
 					System.out.println("\nEz duzu produkturik erosi.");
 				}
@@ -626,7 +626,7 @@ public class Aplikazioa {
 			// -------------------------------------------------------------
 			case 3:
 				int aukera3 = 0;
-				boolean balmenu8 = true;
+				boolean balmenu8 = false;
 
 				do {
 					// Menú secundario para la gestión de servicios
@@ -649,9 +649,10 @@ public class Aplikazioa {
 							aukera3 = Integer.parseInt(zbk);
 						} catch (NumberFormatException e) {
 							System.out.println("Mesedez sartu zenbaki bat");
-							balmenu8 = false;
+							balmenu8 = true;
 						}
-					} while (balmenu8 == false);
+					} while (!balmenu8); 
+					//while (balmenu8 == false);
 
 					switch (aukera3) {
 					// Subopción 3.1: Dar en adopción (dar de alta un nuevo animal)
@@ -725,7 +726,7 @@ public class Aplikazioa {
 						izenadina(animaliizena, adina);
 						System.out.print("Aukeratu animalia: ");
 						String adinberria = teklatua.nextLine();
-						adina = aldatu(animaliizena, adinberria, adina);
+						adina = aldatu(animaliizena, adinberria, adina, teklatua);
 						break;
 					}
 				} while (aukera3 != 4);
@@ -756,8 +757,9 @@ public class Aplikazioa {
 				+ "           ` ;:       |    `--\\__,'\r\n"
 				+ "             '`      ,'\r\n"
 				+ "                  ,-'\r\n");
+        	Thread.sleep(2077);
 			System.exit(0);
-            Thread.sleep(2000);
+
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); 
         }
