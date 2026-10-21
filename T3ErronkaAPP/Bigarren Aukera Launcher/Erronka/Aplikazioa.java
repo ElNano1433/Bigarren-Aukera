@@ -160,11 +160,11 @@ public class Aplikazioa {
 		if (a == 1) {
 			a = 5; // Pienso gato 1kg -> 5€
 		} else if (a == 2) {
-			a = 25; // Pienso gato 5kg -> 25€
+			a = 20; // Pienso gato 5kg -> 25€
 		} else if (a == 3) {
 			a = 5; // Pienso perro 1kg -> 5€
 		} else {
-			a = 25; // Pienso perro 5kg -> 25€
+			a = 20; // Pienso perro 5kg -> 25€
 		}
 
 		return a * b; // Subtotal = Precio unitario * Cantidad
@@ -626,7 +626,7 @@ public class Aplikazioa {
 			// -------------------------------------------------------------
 			case 3:
 				int aukera3 = 0;
-				boolean balmenu8 = true;
+				boolean balmenu8 = false;
 
 				do {
 					// Menú secundario para la gestión de servicios
@@ -649,9 +649,10 @@ public class Aplikazioa {
 							aukera3 = Integer.parseInt(zbk);
 						} catch (NumberFormatException e) {
 							System.out.println("Mesedez sartu zenbaki bat");
-							balmenu8 = false;
+							balmenu8 = true;
 						}
-					} while (balmenu8 == false);
+					} while (!balmenu8); 
+					//while (balmenu8 == false);
 
 					switch (aukera3) {
 					// Subopción 3.1: Dar en adopción (dar de alta un nuevo animal)
