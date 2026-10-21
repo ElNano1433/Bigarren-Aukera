@@ -1,7 +1,5 @@
 package Erronka;
-
 import java.util.Scanner;
-
 /**
  * Clase principal para la aplicación de gestión de la protectora y tienda
  * "Erronka". Permite listar, registrar, modificar y adoptar animales, además de
@@ -24,14 +22,27 @@ public class Aplikazioa {
 	public static final String COLOR_5 = "\u001B[38;2;255;153;234m";
 	public static final String COLOR_6 = "\u001B[38;2;255;20;20m";
 	public static final String GRISF4 = "\u001B[38;2;74;74;74m";
-	public static final String VERDE_HEX = "\u001B[38;2;42;245;39m";
-	public static final String NARANJA_HEX = "\u001B[38;2;245;125;39m";
-	public static final String CELESTE_HEX = "\u001B[38;5;117m";
 
-	
 	/**
 	 * Muestra una lista simplificada de los animales registrados (solo nombre y
 	 * edad).
+
+    
+          
+            
+    
+
+          
+          Expand Down
+          
+            
+    
+
+          
+          Expand Up
+    
+    @@ -236,18 +240,19 @@ public static void fakturaErakutsi(int subtotala) {
+  
 	 *
 	 * @param a Array con los nombres de los animales.
 	 * @param b Array con las edades de los animales.
@@ -48,7 +59,6 @@ public class Aplikazioa {
 		}
 		System.out.println(" ");
 	}
-
 	/**
 	 * Busca un animal por su nombre y actualiza su edad con un nuevo valor
 	 * validado.
@@ -58,38 +68,33 @@ public class Aplikazioa {
 	 * @param c Array con las edades actuales de los animales.
 	 * @return El array de edades actualizado con la nueva cifra introducida.
 	 */
-	public static String[] aldatu(String[] a, String b, String[] c, Scanner teklatua) {
+	public static String[] aldatu(String[] a, String b, String[] c) {
+		Scanner teklatua = new Scanner(System.in);
 		String adina = " ";
-		boolean aurkituta = false; // Flag para controlar el bucle de validación
-
-	    for (int i = 0; i < a.length; i++) {
-	        // Evitamos errores verificando que la posición no sea null antes de comparar
-	        if (a[i] != null && b.equalsIgnoreCase(a[i])) {
-	            aurkituta = true; // ¡Lo encontramos!
-	            boolean balidatu = false;
-
-	            // 2. Solo AHORA que sabemos que el animal existe, insistimos en pedir un número válido
-	            do {
-	                try {
-	                    System.out.print("Sartu adina berri: ");
-	                    adina = teklatua.nextLine();
-	                    int ad = Integer.parseInt(adina); // Si esto falla, salta al catch
-	                    c[i] = adina; // Guarda la edad si no hubo fallo
-	                    balidatu = true; // Rompe este bucle de validación
-	                } catch (NumberFormatException e) {
-	                    System.out.println("Mesedez sartu zenbaki bat.");
-	                    // No hace falta poner balidatu = false; porque ya vale false
-	                }
-	            } while (!balidatu);
+		boolean balidatu = false; // Flag para controlar el bucle de validación
+		do {
+			// Recorremos el array para encontrar el animal indicado
+			for (int i = 0; i < a.length; i++) {
+				// Comparamos sin diferenciar mayúsculas de minúsculas
+				if (b.equalsIgnoreCase(a[i])) {
+					try {
+						System.out.print("Sartu adina berri: ");
+						adina = teklatua.nextLine();
+						// Intentamos parsear a entero para comprobar que es un número válido
+						int ad = Integer.parseInt(adina);
+						c[i] = adina; // Guardamos la nueva edad
+						balidatu = true; // Marcamos como válido para salir del bucle
+					} catch (NumberFormatException e) {
+						// Notificamos el error si no ha introducido un número
+						System.out.println("Mesedez sartu zenbaki bat.");
+						balidatu = false;
+					}
 				}
 			}
-			
-			if (!aurkituta) {
-				System.out.println("Ez da animalia hori aurkitu");
-			}
+		} while (balidatu == false);
+		teklatua.close();
 		return c;
 	}
-
 	/**
 	 * Muestra una lista completa y detallada de los animales registrados (nombre,
 	 * especie, edad y raza/color).
@@ -115,7 +120,6 @@ public class Aplikazioa {
 		}
 		System.out.println(" ");
 	}
-
 	/**
 	 * Calcula la suma total de euros en descuentos aplicables según la condición
 	 * del comprador.
@@ -130,21 +134,17 @@ public class Aplikazioa {
 	public static double desk(int a, char b, char c) {
 		double adopt = 0;
 		double socio = 0;
-
 		// Descuento por adopción (10%)
 		if (b == 'B' || b == 'b') {
 			adopt = a * 0.1;
 		}
-
 		// Descuento por condición de socio (5%)
 		if (c == 'B' || c == 'b') {
 			socio = a * 0.05;
 		}
-
 		double totaldesk = socio + adopt;
 		return totaldesk;
 	}
-
 	/**
 	 * Calcula el coste total de la selección de alimento según el producto y la
 	 * cantidad elegidos.
@@ -166,10 +166,8 @@ public class Aplikazioa {
 		} else {
 			a = 25; // Pienso perro 5kg -> 25€
 		}
-
 		return a * b; // Subtotal = Precio unitario * Cantidad
 	}
-
 	/**
 	 * Calcula el coste total de la selección de juguetes según la opción y la
 	 * cantidad elegidos.
@@ -190,10 +188,8 @@ public class Aplikazioa {
 		} else {
 			a = 10; // Castillo para gatos -> 10€
 		}
-
 		return a * b; // Subtotal = Precio unitario * Cantidad
 	}
-
 	/**
 	 * Calcula el coste total de la selección de merchandising según el artículo y
 	 * la cantidad.
@@ -211,55 +207,50 @@ public class Aplikazioa {
 		} else {
 			a = 15; // Mochila -> 15€
 		}
-
 		return a * b; // Subtotal = Precio unitario * Cantidad
 	}
-
 	/**
 	 * Solicita los datos de descuentos al usuario, calcula el precio final
 	 * acumulado e imprime la factura.
 	 *
 	 * @param subtotala Subtotal bruto acumulado por las compras.
 	 */
-	public static void fakturaErakutsi(int subtotala, Scanner teklatua) {
+	public static void fakturaErakutsi(int subtotala) {
+		Scanner teklatua = new Scanner(System.in);
 		// Pregunta si el cliente ha adoptado un animal
 		System.out.println(" ");
 		System.out.println("Badaukazu hemengo animalirik adoptatuta? (B/E) ");
 		String zbk = teklatua.nextLine();
 		char adopt = zbk.isEmpty() ? 'E' : zbk.charAt(0);
-
 		// Pregunta si el cliente es socio
 		System.out.println("Gure enpresaren sozioa zara? (B/E) ");
 		zbk = teklatua.nextLine();
 		char socio = zbk.isEmpty() ? 'E' : zbk.charAt(0);
-
 		// Cálculo de los descuentos aplicables y precio con descuento
 		double tot = desk(subtotala, adopt, socio);
 		double prezioF = subtotala - tot;
-
 		// Impresión formateada del resumen de la compra
 		// Definimos el formato para las filas de datos.
 		// %-25s = Texto alineado a la izquierda, ocupando exactamente 25 caracteres.
 		// Formato puro de texto: %-25s para la etiqueta y %8s para el precio
-		// Modificamos el formato para recibir: [color], [texto de 25 caracteres], [reset], [precio]
-		String formatoFila = "  | %s%-25s%s %8s    |\n";
+		String formatoFila = "  | %-25s %8s    |\n";
 
 		System.out.println("  +---------------------------------------+");
-		System.out.println("  |               "+AZUL+"FAKTURA"+RESET+"                 |");
+		System.out.println("  |               FAKTURA                 |");
 		System.out.println("  +---------------------------------------+");
 
-		// Pasamos las variables de color por separado
-		System.out.printf(formatoFila, NARANJA_HEX, "Subtotala:", RESET, subtotala + "€");
-		System.out.printf(formatoFila, VERDE_HEX, "Deskontua:", RESET, tot + "€");
+		// Convertimos los números a String y les concatenamos el símbolo €
+		System.out.printf(formatoFila, "Subtotala:", subtotala + "€");
+		System.out.printf(formatoFila, "Deskontua:", tot + "€");
 
 		System.out.println("  |---------------------------------------|");
-		System.out.printf(formatoFila, CELESTE_HEX, "Deskontuak aplikatuta:", RESET, prezioF + "€");
+		System.out.printf(formatoFila, "Deskontuak aplikatuta:", prezioF + "€");
 
 		System.out.println("  +---------------------------------------+");
 		System.out.println();
 
+		teklatua.close();
 	}
-
 	/**
 	 * Limpia la pantalla de la consola según el sistema operativo detectado
 	 * (Windows o basado en Unix).
@@ -277,7 +268,6 @@ public class Aplikazioa {
 			System.out.println("\n\n");
 		}
 	}
-
 	/**
 	 * Método principal que ejecuta la aplicación. Inicializa los datos
 	 * predeterminados, muestra los menús iterativos y coordina la lógica del
@@ -286,28 +276,23 @@ public class Aplikazioa {
 	 * @param args Argumentos de la línea de comandos (no utilizados).
 	 */
 	public static void main(String[] args) {
-
 		Scanner teklatua = new Scanner(System.in);
-
 		// Inicialización de arrays paralelos para registrar hasta 10 animales
 		String[] animaliizena = new String[10];
 		animaliizena[0] = "Jacobo";
 		animaliizena[1] = "Luis";
 		animaliizena[2] = "Pedro";
 		animaliizena[3] = "DiGref";
-
 		String[] animaliamota = new String[10];
 		animaliamota[0] = "Katua";
 		animaliamota[1] = "Txakurra";
 		animaliamota[2] = "Txakurra";
 		animaliamota[3] = "Katua";
-
 		String[] adina = new String[10];
 		adina[0] = "1";
 		adina[1] = "3";
 		adina[2] = "12";
 		adina[3] = "4";
-
 		String[] arraza = new String[10];
 		arraza[0] = "Laranja";
 		arraza[1] = "Chihuahua";
@@ -319,11 +304,9 @@ public class Aplikazioa {
 		animaliid[1] = "ID-002";
 		animaliid[2] = "ID-003";
 		animaliid[3] = "ID-004";
-
 		int aukera = 0; // Opción del menú principal
 		boolean balmenu1 = true; // Control de validación de entrada entera
 		String zbk = " "; // Lectura de texto del Scanner
-
 		// BUCLE PRINCIPAL DEL PROGRAMA
 		do {
 			// Bucle de presentación y validación del menú principal
@@ -348,11 +331,9 @@ public class Aplikazioa {
 				System.out.println("|==========================================|" + COLOR_3 + "/_____/   " + RESET
 						+ COLOR_6 + "U" + RESET);
 				System.out.print(AZUL + "Aukeratu -> " + RESET);
-
 				zbk = teklatua.nextLine();
 				limpiarConsola();
 				balmenu1 = true;
-
 				// Captura y validación de entrada entera
 				try {
 					aukera = Integer.parseInt(zbk);
@@ -361,7 +342,6 @@ public class Aplikazioa {
 					balmenu1 = false;
 				}
 			} while (balmenu1 == false);
-
 			// EVALUACIÓN DE LAS OPCIONES DEL MENÚ PRINCIPAL
 			switch (aukera) {
 			// -------------------------------------------------------------
@@ -370,7 +350,6 @@ public class Aplikazioa {
 			case 1:
 				animaliakerakutsi(animaliid, animaliamota, adina, arraza, animaliizena);
 				break;
-
 			// -------------------------------------------------------------
 			// OPCIÓN 2: Proceso de compra de productos
 			// -------------------------------------------------------------
@@ -379,7 +358,6 @@ public class Aplikazioa {
 				boolean balmenu2 = true;
 				int aukera2 = 0;
 				char jarraitu = 'B'; // Variable de control para seguir comprando ('B' = Bai / Sí)
-
 				do {
 					// Selección de categoría de producto con validación
 					do {
@@ -394,7 +372,6 @@ public class Aplikazioa {
 						System.out.println("|4. " + ROJO + "Amaitu eta ordaindu" + RESET + "                    |");
 						System.out.println("|==========================================|" + RESET);
 						System.out.print(AZUL + "Aukeratu -> " + RESET);
-
 						zbk = teklatua.nextLine();
 						limpiarConsola();
 						balmenu2 = true;
@@ -405,14 +382,12 @@ public class Aplikazioa {
 							balmenu2 = false;
 						}
 					} while (balmenu2 == false);
-
 					switch (aukera2) {
 					// Subopción 2.1: Merchandising
 					case 1:
 						int merch = 0;
 						int kop = 0;
 						boolean balmenu3 = true;
-
 						// Selección de artículo dentro de merchandising
 						do {
 							System.out.println("|-------------" + COLOR_1 + " MERCHANDISING " + RESET + "--------------|");
@@ -426,7 +401,6 @@ public class Aplikazioa {
 							System.out.println("|0. " + ROJO + "Atzera" + RESET + "                                 |");
 							System.out.println("|==========================================|" + RESET);
 							System.out.print(AZUL + "Aukeratu -> " + RESET);
-
 							zbk = teklatua.nextLine();
 							balmenu3 = true;
 							limpiarConsola();
@@ -441,12 +415,10 @@ public class Aplikazioa {
 								balmenu3 = false;
 							}
 						} while (balmenu3 == false);
-
 						// Si elige 0 se cancela la selección de esta categoría
 						if (merch == 0) {
 							break;
 						}
-
 						// Solicitud y validación de la cantidad
 						boolean balmenu5 = true;
 						do {
@@ -460,7 +432,6 @@ public class Aplikazioa {
 								balmenu5 = false;
 							}
 						} while (balmenu5 == false);
-
 						// Acumula el subtotal devuelto por el método merch()
 						subtotalGuztira += merch(merch, kop);
 						System.out.println(
@@ -470,13 +441,11 @@ public class Aplikazioa {
 						jarraitu = zbk.isEmpty() ? 'E' : zbk.charAt(0);
 						limpiarConsola();
 						break;
-
 					// Subopción 2.2: Juguetes
 					case 2:
 						int jost = 0;
 						kop = 0;
 						boolean balmenu4 = true;
-
 						// Selección del juguete
 						do {
 							System.out.println("|---------------" + COLOR_1 + " JOSTAILUAK " + RESET + "---------------|");
@@ -506,11 +475,9 @@ public class Aplikazioa {
 								balmenu4 = false;
 							}
 						} while (balmenu4 == false);
-
 						if (jost == 0) {
 							break;
 						}
-
 						// Solicitud y validación de cantidad
 						boolean balJostKop = true;
 						do {
@@ -524,7 +491,6 @@ public class Aplikazioa {
 								balJostKop = false;
 							}
 						} while (balJostKop == false);
-
 						// Acumula el subtotal devuelto por el método jostailuak()
 						subtotalGuztira += jostailuak(jost, kop);
 						System.out.println(
@@ -534,13 +500,11 @@ public class Aplikazioa {
 						jarraitu = zbk.isEmpty() ? 'E' : zbk.charAt(0);
 						limpiarConsola();
 						break;
-
 					// Subopción 2.3: Comida
 					case 3:
 						boolean balmenu6 = true;
 						int janaria = 0;
 						kop = 0;
-
 						// Selección del tipo de comida
 						do {
 							System.out.println("|----------------" + COLOR_1 + " JANARIA " + RESET + "-----------------| ");
@@ -556,7 +520,6 @@ public class Aplikazioa {
 							System.out.println("|0. " + ROJO + "Atzera" + RESET + "                                 |");
 							System.out.println("|==========================================|" + RESET);
 							System.out.print(AZUL + "Aukeratu -> " + RESET);
-
 							zbk = teklatua.nextLine();
 							balmenu6 = true;
 							limpiarConsola();
@@ -571,11 +534,9 @@ public class Aplikazioa {
 								balmenu6 = false;
 							}
 						} while (balmenu6 == false);
-
 						if (janaria == 0) {
 							break;
 						}
-
 						// Solicitud y validación de cantidad
 						boolean balmenu7 = true;
 						do {
@@ -589,7 +550,6 @@ public class Aplikazioa {
 								balmenu7 = false;
 							}
 						} while (balmenu7 == false);
-
 						// Acumula el subtotal devuelto por el método janaria()
 						subtotalGuztira += janaria(janaria, kop);
 						System.out.println(
@@ -599,35 +559,29 @@ public class Aplikazioa {
 						jarraitu = zbk.isEmpty() ? 'E' : zbk.charAt(0);
 						limpiarConsola();
 						break;
-
 					// Subopción 2.4: Terminar la compra y proceder al pago
 					case 4:
 						jarraitu = 'E'; // Marca 'E' (Ez / No) para romper el bucle de compras
 						break;
 					}
-
 					// Si el usuario decide no seguir comprando, sale del bucle de productos
 					if (jarraitu == 'E' || jarraitu == 'e') {
 						break;
 					}
-
 				} while (aukera2 != 4);
-
 				// Si hay compras registradas, emitimos la factura final
 				if (subtotalGuztira > 0) {
-					fakturaErakutsi(subtotalGuztira, teklatua);
+					fakturaErakutsi(subtotalGuztira);
 				} else {
 					System.out.println("\nEz duzu produkturik erosi.");
 				}
 				break;
-
 			// -------------------------------------------------------------
 			// OPCIÓN 3: Servicios de la protectora
 			// -------------------------------------------------------------
 			case 3:
 				int aukera3 = 0;
-				boolean balmenu8 = false;
-
+				boolean balmenu8 = true;
 				do {
 					// Menú secundario para la gestión de servicios
 					do {
@@ -642,18 +596,15 @@ public class Aplikazioa {
 						System.out.println("| 4. " + ROJO + "Irten" + RESET + "                                 |");
 						System.out.println("|==========================================|" + RESET);
 						System.out.print(AZUL + "Aukeratu -> " + RESET);
-
 						zbk = teklatua.nextLine();
 						limpiarConsola();
 						try {
 							aukera3 = Integer.parseInt(zbk);
 						} catch (NumberFormatException e) {
 							System.out.println("Mesedez sartu zenbaki bat");
-							balmenu8 = true;
+							balmenu8 = false;
 						}
-					} while (!balmenu8); 
-					//while (balmenu8 == false);
-
+					} while (balmenu8 == false);
 					switch (aukera3) {
 					// Subopción 3.1: Dar en adopción (dar de alta un nuevo animal)
 					case 1:
@@ -665,19 +616,15 @@ public class Aplikazioa {
 					            break;
 					        }
 					    }
-
 					    // Comprobar si hay espacio disponible en los arrays
 					    if (pos == -1) {
 					        System.out.println("Ezin da animalia gehiago gehitu (zerrenda beteta dago).");
 					        break;
 					    }
-
 					    System.out.print("Sartu animaliaren izena -> ");
 					    String izena = teklatua.nextLine();
-
 					    System.out.print("Sartu animali mota -> ");
 					    String animali = teklatua.nextLine();
-
 					    // Captura y validación entera de la edad del animal
 					    String adi = "";
 					    boolean balidazio = true;
@@ -692,10 +639,8 @@ public class Aplikazioa {
 					            balidazio = false;
 					        }
 					    } while (!balidazio);
-
 					    System.out.print("Sartu animali arraza edo kolorea -> ");
 					    String arrazaani = teklatua.nextLine();
-
 					    // Guardar los datos en el índice asignado y generar el ID en orden secuencial
 					    animaliizena[pos] = izena;
 					    animaliamota[pos] = animali;
@@ -708,7 +653,6 @@ public class Aplikazioa {
 						animaliakerakutsi(animaliid, animaliamota, adina, arraza, animaliizena);
 						System.out.print("Zein adoptatu nahi duzu? ");
 						String izenaani = teklatua.nextLine();
-
 						// Buscamos por nombre y ponemos a null todos sus atributos
 						for (int i = 0; i < animaliizena.length; i++) {
 							if (izenaani.equalsIgnoreCase(animaliizena[i])) {
@@ -720,19 +664,17 @@ public class Aplikazioa {
 							}
 						}
 						break;
-
 					// Subopción 3.3: Cambiar la edad de un animal existente
 					case 3:
 						izenadina(animaliizena, adina);
 						System.out.print("Aukeratu animalia: ");
 						String adinberria = teklatua.nextLine();
-						adina = aldatu(animaliizena, adinberria, adina, teklatua);
+						adina = aldatu(animaliizena, adinberria, adina);
 						break;
 					}
 				} while (aukera3 != 4);
 				break;
 			}
-
 		} while (aukera != 4); // El programa finaliza al seleccionar 4 en el menú principal
 		try {
 		System.out.println("                       ;\\\r\n"
@@ -757,13 +699,11 @@ public class Aplikazioa {
 				+ "           ` ;:       |    `--\\__,'\r\n"
 				+ "             '`      ,'\r\n"
 				+ "                  ,-'\r\n");
-        	Thread.sleep(2077);
 			System.exit(0);
-
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt(); 
         }
-
 		teklatua.close(); // Cerramos el Scanner
 		System.exit(0);
 	}
