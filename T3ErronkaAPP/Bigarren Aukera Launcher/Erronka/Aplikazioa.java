@@ -652,7 +652,7 @@ public class Aplikazioa {
 							balmenu8 = true;
 						}
 					} while (!balmenu8); 
-					//while (balmenu8 == false);
+					while (balmenu8 == false);
 
 					switch (aukera3) {
 					// Subopción 3.1: Dar en adopción (dar de alta un nuevo animal)
