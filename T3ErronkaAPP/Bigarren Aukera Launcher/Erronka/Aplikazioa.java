@@ -626,7 +626,7 @@ public class Aplikazioa {
 			// -------------------------------------------------------------
 			case 3:
 				int aukera3 = 0;
-				boolean balmenu8 = false;
+				boolean balmenu8 = true;
 
 				do {
 					// Menú secundario para la gestión de servicios
@@ -649,10 +649,10 @@ public class Aplikazioa {
 							aukera3 = Integer.parseInt(zbk);
 						} catch (NumberFormatException e) {
 							System.out.println("Mesedez sartu zenbaki bat");
-							balmenu8 = true;
+							balmenu8 = false;
 						}
-					} while (!balmenu8); 
-					while (balmenu8 == false);
+					} while (balmenu8 == false);
+					//while (!balmenu8); 
 
 					switch (aukera3) {
 					// Subopción 3.1: Dar en adopción (dar de alta un nuevo animal)
