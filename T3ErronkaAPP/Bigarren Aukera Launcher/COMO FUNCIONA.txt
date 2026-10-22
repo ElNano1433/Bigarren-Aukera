@@ -1,3 +1,5 @@
+¡¡¡MUY IMPORTANTE, MANTENER LA ESTRUCTURA DE CARPETAS, SOLO SACAR EL ACCESO DIRECTO (2)!!!
+
 1. Descomprimir la carpeta y dejarla en C la carpeta que se llama "Bigarren Aukera Launcher" (RECOMENDACION).
 
 2. Mover el acceso directo llamado "BIGARREN AUKERA" a donde quieras.
