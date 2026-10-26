@@ -56,6 +56,7 @@ public class Aplikazioa {
 	 * @param a Array de nombres de animales.
 	 * @param b Nombre del animal a modificar.
 	 * @param c Array con las edades actuales de los animales.
+	 * @param teklatua Objeto Scanner para la lectura de la entrada por consola.
 	 * @return El array de edades actualizado con la nueva cifra introducida.
 	 */
 	public static String[] aldatu(String[] a, String b, String[] c, Scanner teklatua) {
@@ -91,13 +92,14 @@ public class Aplikazioa {
 	}
 
 	/**
-	 * Muestra una lista completa y detallada de los animales registrados (nombre,
-	 * especie, edad y raza/color).
+	 * Muestra una lista completa y detallada de los animales registrados (ID,
+	 * nombre, tipo/especie, edad y raza/color).
 	 *
-	 * @param a Array con los tipos/especies de los animales.
-	 * @param b Array con las edades.
-	 * @param c Array con las razas o colores.
-	 * @param d Array con los nombres.
+	 * @param a Array con los identificadores (ID) de los animales.
+	 * @param b Array con los tipos/especies de los animales.
+	 * @param c Array con las edades de los animales.
+	 * @param d Array con las razas o colores de los animales.
+	 * @param e Array con los nombres de los animales.
 	 */
 	public static void animaliakerakutsi(String[] a, String[] b, String[] c, String[] d, String[] e) {
 		// Recorremos los datos de los animales
@@ -220,6 +222,7 @@ public class Aplikazioa {
 	 * acumulado e imprime la factura.
 	 *
 	 * @param subtotala Subtotal bruto acumulado por las compras.
+	 * @param teklatua  Objeto Scanner para la lectura de la entrada por consola.
 	 */
 	public static void fakturaErakutsi(int subtotala, Scanner teklatua) {
 		// Pregunta si el cliente ha adoptado un animal
