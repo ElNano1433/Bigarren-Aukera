@@ -162,11 +162,11 @@ public class Aplikazioa {
 		if (a == 1) {
 			a = 5; // Pienso gato 1kg -> 5€
 		} else if (a == 2) {
-			a = 20; // Pienso gato 5kg -> 25€
+			a = 20; // Pienso gato 5kg -> 20€
 		} else if (a == 3) {
 			a = 5; // Pienso perro 1kg -> 5€
 		} else {
-			a = 20; // Pienso perro 5kg -> 25€
+			a = 20; // Pienso perro 5kg -> 20€
 		}
 
 		return a * b; // Subtotal = Precio unitario * Cantidad
