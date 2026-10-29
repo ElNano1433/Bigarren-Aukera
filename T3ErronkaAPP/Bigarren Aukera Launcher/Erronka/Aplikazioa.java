@@ -3,17 +3,16 @@ package Erronka;
 import java.util.Scanner;
 
 /**
- * Clase principal para la aplicación de gestión de la protectora y tienda
- * "Erronka". Permite listar, registrar, modificar y adoptar animales, además de
- * gestionar la compra de productos (merchandising, juguetes y comida) con
- * cálculo de descuentos y generación de facturas.
+ * "Erronka" babesetxea eta denda kudeatzeko aplikazioaren klase nagusia.
+ * Animaliak zerrendatu, erregistratu, aldatu eta adoptatzea ahalbidetzen du,
+ * baita produktuen erosketa (merchandising-a, jostailuak eta janaria) kudeatzea ere,
+ * deskontuak kalkulatuz eta fakturak sortuz.
  *
  * @author Erronka
  * @version 1.0
  */
 public class Aplikazioa {
-	// Constantes de códigos ANSI para dar colores y estilos a los menús impresos en
-	// consola
+	// Kontsolan inprimatutako menuei koloreak eta estiloak emateko ANSI kodeen konstanteak
 	public static final String RESET = "\u001B[0m";
 	public static final String COLOR_1 = "\u001B[38;5;66m";
 	public static final String ROJO = "\u001B[31m";
@@ -30,16 +29,15 @@ public class Aplikazioa {
 
 	
 	/**
-	 * Muestra una lista simplificada de los animales registrados (solo nombre y
-	 * edad).
+	 * Erregistratutako animalien zerrenda sinplifikatua erakusten du (izena eta adina bakarrik).
 	 *
-	 * @param a Array con los nombres de los animales.
-	 * @param b Array con las edades de los animales.
+	 * @param a Animalien izenak dituen array-a.
+	 * @param b Animalien adinak dituen array-a.
 	 */
 	public static void izenadina(String[] a, String[] b) {
-		// Recorremos las posiciones de los arrays de nombres y edades
+		// Izenen eta adinen array-en posizioak zeharkatzen ditugu
 		for (int i = 0; i < a.length; i++) {
-			// Comprobamos que la posición no esté vacía en ambos arrays
+			// Bi array-etan posizioa hutsik ez dagoela egiaztatzen dugu
 			if (a[i] != null || b[i] != null) {
 				System.out.println(" ");
 				System.out.print("Animaliaren izena: " + a[i] + ", ");
@@ -50,61 +48,84 @@ public class Aplikazioa {
 	}
 
 	/**
-	 * Busca un animal por su nombre y actualiza su edad con un nuevo valor
-	 * validado.
+	 * Animalia bat bilatzen du bere izenaren bidez eta bere adina balioztatutako balio berri batekin eguneratzen du.
 	 *
-	 * @param a Array de nombres de animales.
-	 * @param b Nombre del animal a modificar.
-	 * @param c Array con las edades actuales de los animales.
-	 * @param teklatua Objeto Scanner para la lectura de la entrada por consola.
-	 * @return El array de edades actualizado con la nueva cifra introducida.
+	 * @param a Animalien izenen array-a.
+	 * @param b Aldatu nahi den animaliaren izena.
+	 * @param c Animalien uneko adinak dituen array-a.
+	 * @param teklatua Kontsolako sarrera irakurtzeko Scanner objektua.
+	 * @return Txertatutako kopuru berriarekin eguneratutako adinen array-a.
 	 */
+
 	public static String[] aldatu(String[] a, String b, String[] c, Scanner teklatua) {
-		String adina = " ";
-		boolean aurkituta = false; // Flag para controlar el bucle de validación
 
-	    for (int i = 0; i < a.length; i++) {
-	        // Evitamos errores verificando que la posición no sea null antes de comparar
-	        if (a[i] != null && b.equalsIgnoreCase(a[i])) {
-	            aurkituta = true; // ¡Lo encontramos!
-	            boolean balidatu = false;
+		String adina = "";
+		boolean aurkituta = false;
 
-	            // 2. Solo AHORA que sabemos que el animal existe, insistimos en pedir un número válido
-	            do {
-	                try {
-	                    System.out.print("Sartu adina berri: ");
-	                    adina = teklatua.nextLine();
-	                    int ad = Integer.parseInt(adina); // Si esto falla, salta al catch
-	                    c[i] = adina; // Guarda la edad si no hubo fallo
-	                    balidatu = true; // Rompe este bucle de validación
-	                } catch (NumberFormatException e) {
-	                    System.out.println("Mesedez sartu zenbaki bat.");
-	                    // No hace falta poner balidatu = false; porque ya vale false
-	                }
-	            } while (!balidatu);
+		do {
+
+			System.out.print("Aukeratu animalia: ");
+			b = teklatua.nextLine().trim();
+
+			// Animalia bilatzen dugu
+			for (int i = 0; i < a.length; i++) {
+
+				if (a[i] != null && b.equalsIgnoreCase(a[i])) {
+
+					aurkituta = true;
+
+					boolean balidatu = false;
+
+					// Adin berria balioztatzen dugu
+					do {
+						try {
+							System.out.print("Sartu adina berri: ");
+							adina = teklatua.nextLine();
+
+							int ad = Integer.parseInt(adina);
+
+							if (ad < 0) {
+								throw new NumberFormatException();
+							}
+
+							c[i] = adina;
+							balidatu = true;
+
+						} catch (NumberFormatException e) {
+							System.out.println("Mesedez, sartu baliozko zenbaki oso bat.");
+						}
+
+					} while (!balidatu);
+
+					System.out.println("Animaliaren adina behar bezala aldatu da.");
+					break;
 				}
 			}
-			
+
 			if (!aurkituta) {
-				System.out.println("Ez da animalia hori aurkitu");
+				System.out.println("Ez da animalia hori aurkitu. Saiatu berriro.");
 			}
+
+		} while (!aurkituta);
+
 		return c;
 	}
 
+
 	/**
-	 * Muestra una lista completa y detallada de los animales registrados (ID,
-	 * nombre, tipo/especie, edad y raza/color).
+	 * Erregistratutako animalien zerrenda osoa eta zehatza erakusten du (IDa,
+	 * izena, mota/espeziea, adina eta arraza/kolorea).
 	 *
-	 * @param a Array con los identificadores (ID) de los animales.
-	 * @param b Array con los tipos/especies de los animales.
-	 * @param c Array con las edades de los animales.
-	 * @param d Array con las razas o colores de los animales.
-	 * @param e Array con los nombres de los animales.
+	 * @param a Animalien identifikatzaileak (ID) dituen array-a.
+	 * @param b Animalien motak/espezieak dituen array-a.
+	 * @param c Animalien adinak dituen array-a.
+	 * @param d Animalien arrazak edo koloreak dituen array-a.
+	 * @param e Animalien izenak dituen array-a.
 	 */
 	public static void animaliakerakutsi(String[] a, String[] b, String[] c, String[] d, String[] e) {
-		// Recorremos los datos de los animales
+		// Animalien datuak zeharkatzen ditugu
 		for (int i = 0; i < a.length; i++) {
-			// Solo imprimimos si al menos uno de los atributos de la posición no es nulo
+			// Posizioko atributuetako bat gutxienez nulua ez bada bakarrik inprimatzen dugu
 			if (a[i] != null || b[i] != null || c[i] != null || d[i] != null || e[i] !=null) {
 				System.out.println(" ");
 				System.out.print("Animaliaren ID: " + a[i] + ", "); 
@@ -119,26 +140,25 @@ public class Aplikazioa {
 	}
 
 	/**
-	 * Calcula la suma total de euros en descuentos aplicables según la condición
-	 * del comprador.
+	 * Emandako eroslearen baldintzaren arabera aplikagarri diren deskontuen euro kopuru osoa kalkulatzen du.
 	 *
-	 * @param a Subtotal acumulado de las compras realizadas en euros.
-	 * @param b Indicador de adopción previa ('B'/'b' para SÍ, 'E'/'e' para NO).
-	 *          Otorga un 10% de descuento.
-	 * @param c Indicador de socio ('B'/'b' para SÍ, 'E'/'e' para NO). Otorga un 5%
-	 *          de descuento.
-	 * @return Importe total de euros descontados.
+	 * @param a Egindako erosketen metatutako azpitotala eurotan.
+	 * @param b Aurretiko adopzioaren adierazlea ('B'/'b' BAIrako, 'E'/'e' EZerako).
+	 *          %10eko deskontua ematen du.
+	 * @param c Bazkide izatearen adierazlea ('B'/'b' BAIrako, 'E'/'e' EZerako). %5eko
+	 *          deskontua ematen du.
+	 * @return Deskontatutako euroen zenbateko osoa.
 	 */
 	public static double desk(int a, char b, char c) {
 		double adopt = 0;
 		double socio = 0;
 
-		// Descuento por adopción (10%)
+		// Adopzioagatiko deskontua (%10)
 		if (b == 'B' || b == 'b') {
 			adopt = a * 0.1;
 		}
 
-		// Descuento por condición de socio (5%)
+		// Bazkide izateagatiko deskontua (%5)
 		if (c == 'B' || c == 'b') {
 			socio = a * 0.05;
 		}
@@ -148,114 +168,150 @@ public class Aplikazioa {
 	}
 
 	/**
-	 * Calcula el coste total de la selección de alimento según el producto y la
-	 * cantidad elegidos.
+	 * Elikagai hautaketaren kostu osoa kalkulatzen du aukeratutako produktuaren eta
+	 * kantitatearen arabera.
 	 *
-	 * @param a Opción elegida (1: Pienso gato 1kg, 2: Pienso gato 5kg, 3: Pienso
-	 *          perro 1kg, 4: Pienso perro 5kg).
-	 * @param b Cantidad de unidades del producto.
-	 * @return El importe total resultante de multiplicar precio unitario por
-	 *         cantidad.
+	 * @param a Aukeratutako aukera (1: Katu pentsua 1kg, 2: Katu pentsua 5kg, 3: Txakur
+	 *          pentsua 1kg, 4: Txakur pentsua 5kg).
+	 * @param b Produktuaren unitate kantitatea.
+	 * @return Unitaterainoko prezioa eta kantitatea biderkatzearen ondoriozko zenbateko osoa.
 	 */
 	public static int janaria(int a, int b) {
-		// Asignación de precio unitario en función de la opción elegida
+		// Aukeratutako aukeraren arabera unitateko prezioa esleitzea
 		if (a == 1) {
-			a = 5; // Pienso gato 1kg -> 5€
+			a = 5; // Katu pentsua 1kg -> 5€
 		} else if (a == 2) {
-			a = 20; // Pienso gato 5kg -> 20€
+			a = 20; // Katu pentsua 5kg -> 20€
 		} else if (a == 3) {
-			a = 5; // Pienso perro 1kg -> 5€
+			a = 5; // Txakur pentsua 1kg -> 5€
 		} else {
-			a = 20; // Pienso perro 5kg -> 20€
+			a = 20; // Txakur pentsua 5kg -> 20€
 		}
 
-		return a * b; // Subtotal = Precio unitario * Cantidad
+		return a * b; // Azpitotala = Unitateko prezioa * Kantitatea
 	}
 
 	/**
-	 * Calcula el coste total de la selección de juguetes según la opción y la
-	 * cantidad elegidos.
+	 * Jostailu hautaketaren kostu osoa kalkulatzen du aukeratutako aukeraren eta
+	 * kantitatearen arabera.
 	 *
-	 * @param a Opción elegida (1: Pelota, 2: Juego interactivo, 3: Vara con plumas,
-	 *          4: Castillo).
-	 * @param b Cantidad de unidades.
-	 * @return El importe total de los juguetes seleccionados.
+	 * @param a Aukeratutako aukera (1: Pilota, 2: Joko interaktiboa, 3: Lumadun makila,
+	 *          4: Gaztelua).
+	 * @param b Unitate kantitatea.
+	 * @return Aukeratutako jostailuen zenbateko osoa.
 	 */
 	public static int jostailuak(int a, int b) {
-		// Asignación de precio unitario en función del juguete
+		// Jostailuaren arabera unitateko prezioa esleitzea
 		if (a == 1) {
-			a = 5; // Pelota -> 5€
+			a = 5; // Pilota -> 5€
 		} else if (a == 2) {
-			a = 20; // Juego interactivo -> 20€
+			a = 20; // Joko interaktiboa -> 20€
 		} else if (a == 3) {
-			a = 5; // Vara con plumas -> 5€
+			a = 5; // Lumadun makila -> 5€
 		} else {
-			a = 10; // Castillo para gatos -> 10€
+			a = 10; // Katuentzako gaztelua -> 10€
 		}
 
-		return a * b; // Subtotal = Precio unitario * Cantidad
+		return a * b; // Azpitotala = Unitateko prezioa * Kantitatea
 	}
 
 	/**
-	 * Calcula el coste total de la selección de merchandising según el artículo y
-	 * la cantidad.
+	 * Merchandising hautaketaren kostu osoa kalkulatzen du artikuluaren eta
+	 * kantitatearen arabera.
 	 *
-	 * @param a Opción elegida (1: Camiseta, 2: Sudadera, 3: Mochila).
-	 * @param b Cantidad de unidades.
-	 * @return El importe total de los productos de merchandising.
+	 * @param a Aukeratutako aukera (1: Kamiseta, 2: Sudadera, 3: Motxila).
+	 * @param b Unitate kantitatea.
+	 * @return Merchandising produktuen zenbateko osoa.
 	 */
 	public static int merch(int a, int b) {
-		// Asignación de precio unitario según el producto de merchandising
+		// Merchandising produktuaren arabera unitateko prezioa esleitzea
 		if (a == 1) {
-			a = 10; // Camiseta -> 10€
+			a = 10; // Kamiseta -> 10€
 		} else if (a == 2) {
 			a = 20; // Sudadera -> 20€
 		} else {
-			a = 15; // Mochila -> 15€
+			a = 15; // Motxila -> 15€
 		}
 
-		return a * b; // Subtotal = Precio unitario * Cantidad
+		return a * b; // Azpitotala = Unitateko prezioa * Kantitatea
 	}
 
 	/**
-	 * Solicita los datos de descuentos al usuario, calcula el precio final
-	 * acumulado e imprime la factura.
+	 * Erabiltzaileari deskontuen datuak eskatzen dizkio, metatutako azken prezioa
+	 * kalkulatzen du eta faktura inprimatzen du.
 	 *
-	 * @param subtotala Subtotal bruto acumulado por las compras.
-	 * @param teklatua  Objeto Scanner para la lectura de la entrada por consola.
+	 * @param subtotala Erosketengatik metatutako azpitotal gordina.
+	 * @param teklatua  Kontsolako sarrera irakurtzeko Scanner objektua.
 	 */
+
 	public static void fakturaErakutsi(int subtotala, Scanner teklatua) {
-		// Pregunta si el cliente ha adoptado un animal
+
+		// Bezeroak animaliarik adoptatu duen galdetzen du
+
 		System.out.println(" ");
-		System.out.println("Badaukazu hemengo animalirik adoptatuta? (B/E) ");
-		String zbk = teklatua.nextLine();
-		char adopt = zbk.isEmpty() ? 'E' : zbk.charAt(0);
+		char adopt = ' ';
 
-		// Pregunta si el cliente es socio
-		System.out.println("Gure enpresaren sozioa zara? (B/E) ");
-		zbk = teklatua.nextLine();
-		char socio = zbk.isEmpty() ? 'E' : zbk.charAt(0);
+		while (adopt != 'B' && adopt != 'E') {
+			try {
+				System.out.println("Badaukazu hemengo animalirik adoptatuta? (B/E)");
+				String zbk = teklatua.nextLine().trim().toUpperCase();
 
-		// Cálculo de los descuentos aplicables y precio con descuento
+				if (zbk.length() != 1) {
+					throw new IllegalArgumentException();
+				}
+				adopt = zbk.charAt(0);
+				if (adopt != 'B' && adopt != 'E') {
+					throw new IllegalArgumentException();
+				}
+			} catch (IllegalArgumentException e) {
+				System.out.println("Erantzun okerra! Sartu B (Bai) edo E (Ez).");
+				adopt = ' ';
+			}
+		}
+
+		// Bezeroa bazkidea den galdetzen du
+
+		char socio = ' ';
+
+		while (socio != 'B' && socio != 'E') {
+			try {
+				System.out.println("Gure enpresaren sozioa zara? (B/E)");
+				String zbk = teklatua.nextLine().trim().toUpperCase();
+
+				if (zbk.length() != 1) {
+					throw new IllegalArgumentException();
+				}
+
+				socio = zbk.charAt(0);
+
+				if (socio != 'B' && socio != 'E') {
+					throw new IllegalArgumentException();
+				}
+
+			} catch (IllegalArgumentException e) {
+				System.out.println("Erantzun okerra! Sartu B (Bai) edo E (Ez).");
+				socio = ' ';
+			}
+		}
+
+		// Aplikagarri diren deskontuen eta deskontudun prezioaren kalkulua
+
 		double tot = desk(subtotala, adopt, socio);
 		double prezioF = subtotala - tot;
 
-		// Impresión formateada del resumen de la compra
-		// Definimos el formato para las filas de datos.
-		// %-25s = Texto alineado a la izquierda, ocupando exactamente 25 caracteres.
-		// Formato puro de texto: %-25s para la etiqueta y %8s para el precio
-		// Modificamos el formato para recibir: [color], [texto de 25 caracteres], [reset], [precio]
+		// Erosketaren laburpenaren inprimatze formatuduna
+
 		String formatoFila = "  | %s%-25s%s %8s    |\n";
 
 		System.out.println("  +---------------------------------------+");
-		System.out.println("  |               "+AZUL+"FAKTURA"+RESET+"                 |");
+		System.out.println("  |               " + AZUL + "FAKTURA" + RESET + "                 |");
 		System.out.println("  +---------------------------------------+");
 
-		// Pasamos las variables de color por separado
 		System.out.printf(formatoFila, NARANJA_HEX, "Subtotala:", RESET, subtotala + "€");
 		System.out.printf(formatoFila, VERDE_HEX, "Deskontua:", RESET, tot + "€");
 
 		System.out.println("  |---------------------------------------|");
+
 		System.out.printf(formatoFila, CELESTE_HEX, "Deskontuak aplikatuta:", RESET, prezioF + "€");
 
 		System.out.println("  +---------------------------------------+");
@@ -263,9 +319,10 @@ public class Aplikazioa {
 
 	}
 
+
 	/**
-	 * Limpia la pantalla de la consola según el sistema operativo detectado
-	 * (Windows o basado en Unix).
+	 * Kontsolako pantaila garbitzen du detektatutako sistema eragilearen arabera
+	 * (Windows edo Unix-en oinarritua).
 	 */
 	public static void limpiarConsola() {
 		try {
@@ -275,24 +332,22 @@ public class Aplikazioa {
 				new ProcessBuilder("clear").inheritIO().start().waitFor();
 			}
 		} catch (Exception e) {
-			// En caso de error al ejecutar comandos del sistema, añade varias líneas para
-			// simular limpieza
+			// Sistemako komandoak exekutatzean akatsa gertatuz gero, hainbat lerro gehitzen ditu garbiketa simulatzeko
 			System.out.println("\n\n");
 		}
 	}
 
 	/**
-	 * Método principal que ejecuta la aplicación. Inicializa los datos
-	 * predeterminados, muestra los menús iterativos y coordina la lógica del
-	 * sistema.
+	 * Aplikazioa exekutatzen duen metodo nagusia. Balio lehenetsiak hasieratzen ditu,
+	 * menu iteratiboak erakusten ditu eta sistemaren logika koordinatzen du.
 	 *
-	 * @param args Argumentos de la línea de comandos (no utilizados).
+	 * @param args Komando-lineako argumentuak (ez dira erabiltzen).
 	 */
 	public static void main(String[] args) {
 
 		Scanner teklatua = new Scanner(System.in);
 
-		// Inicialización de arrays paralelos para registrar hasta 10 animales
+		// Gehienez 10 animalia erregistratzeko array paraleloen hasieratzea
 		String[] animaliizena = new String[10];
 		animaliizena[0] = "Jacobo";
 		animaliizena[1] = "Luis";
@@ -323,13 +378,13 @@ public class Aplikazioa {
 		animaliid[2] = "ID-003";
 		animaliid[3] = "ID-004";
 
-		int aukera = 0; // Opción del menú principal
-		boolean balmenu1 = true; // Control de validación de entrada entera
-		String zbk = " "; // Lectura de texto del Scanner
+		int aukera = 0; // Menu nagusiko aukera
+		boolean balmenu1 = true; // Zenbaki osoen sarreraren balioztatze-kontrola
+		String zbk = " "; // Scanner bidezko testu-irakurketa
 
-		// BUCLE PRINCIPAL DEL PROGRAMA
+		// PROGRAMAREN BEGIZTA NAGUSIA
 		do {
-			// Bucle de presentación y validación del menú principal
+			// Menu nagusia aurkezteko eta balioztatzeko begizta
 			do {
 				System.out.println("|-------------" + COLOR_1 + "BIGARREN AUKERA" + RESET + "--------------|" + COLOR_3
 						+ "   / \\__" + RESET);
@@ -356,7 +411,7 @@ public class Aplikazioa {
 				limpiarConsola();
 				balmenu1 = true;
 
-				// Captura y validación de entrada entera
+				// Zenbaki osoen sarreraren harrapaketa eta balioztatzea
 				try {
 					aukera = Integer.parseInt(zbk);
 				} catch (NumberFormatException e) {
@@ -365,26 +420,26 @@ public class Aplikazioa {
 				}
 			} while (balmenu1 == false);
 
-			// EVALUACIÓN DE LAS OPCIONES DEL MENÚ PRINCIPAL
+			// MENU NAGUSIKO AUKEREN EBALUAZIOA
 			switch (aukera) {
 			// -------------------------------------------------------------
-			// OPCIÓN 1: Ver lista de animales en adopción
+			// 1. AUKERA: Adopzioan dauden animalien zerrenda ikusi
 			// -------------------------------------------------------------
 			case 1:
 				animaliakerakutsi(animaliid, animaliamota, adina, arraza, animaliizena);
 				break;
 
 			// -------------------------------------------------------------
-			// OPCIÓN 2: Proceso de compra de productos
+			// 2. AUKERA: Produktuak erosteko prozesua
 			// -------------------------------------------------------------
 			case 2:
-				int subtotalGuztira = 0; // Acumulador total del carrito de compra
+				int subtotalGuztira = 0; // Erosketa saskiaren metatzaile osoa
 				boolean balmenu2 = true;
 				int aukera2 = 0;
-				char jarraitu = 'B'; // Variable de control para seguir comprando ('B' = Bai / Sí)
+				char jarraitu = 'B'; // Erosketekin jarraitzeko kontrol-aldagaia ('B' = Bai)
 
 				do {
-					// Selección de categoría de producto con validación
+					// Produktu kategoriaren aukeraketa balioztatzearekin
 					do {
 						System.out.println("|-------------" + COLOR_1 + "   PRODUKTUAK  " + RESET + "--------------|");
 						System.out.println("|==========================================|" + RESET);
@@ -410,13 +465,13 @@ public class Aplikazioa {
 					} while (balmenu2 == false);
 
 					switch (aukera2) {
-					// Subopción 2.1: Merchandising
+					// 2.1 Azpiazalpena: Merchandising-a
 					case 1:
 						int merch = 0;
 						int kop = 0;
 						boolean balmenu3 = true;
 
-						// Selección de artículo dentro de merchandising
+						// Artikuluaren aukeraketa merchandising-aren barruan
 						do {
 							System.out.println("|-------------" + COLOR_1 + " MERCHANDISING " + RESET + "--------------|");
 							System.out.println("|==========================================|" + RESET);
@@ -445,12 +500,12 @@ public class Aplikazioa {
 							}
 						} while (balmenu3 == false);
 
-						// Si elige 0 se cancela la selección de esta categoría
+						// 0 aukeratuz gero, kategoria honen aukeraketa bertan behera geratzen da
 						if (merch == 0) {
 							break;
 						}
 
-						// Solicitud y validación de la cantidad
+						// Kantitatearen eskaera eta balioztatzea
 						boolean balmenu5 = true;
 						do {
 							System.out.print("Zenbat? ");
@@ -464,7 +519,7 @@ public class Aplikazioa {
 							}
 						} while (balmenu5 == false);
 
-						// Acumula el subtotal devuelto por el método merch()
+						// merch() metodoak itzulitako azpitotala metatzen du
 						subtotalGuztira += merch(merch, kop);
 						System.out.println(
 								"\n--> Produktua saskira gehitu da! Uneko azpitotala: " + subtotalGuztira + "€");
@@ -474,13 +529,13 @@ public class Aplikazioa {
 						limpiarConsola();
 						break;
 
-					// Subopción 2.2: Juguetes
+					// 2.2 Azpiazalpena: Jostailuak
 					case 2:
 						int jost = 0;
 						kop = 0;
 						boolean balmenu4 = true;
 
-						// Selección del juguete
+						// Jostailuaren aukeraketa
 						do {
 							System.out.println("|---------------" + COLOR_1 + " JOSTAILUAK " + RESET + "---------------|");
 							System.out.println("|==========================================|" + RESET);
@@ -514,7 +569,7 @@ public class Aplikazioa {
 							break;
 						}
 
-						// Solicitud y validación de cantidad
+						// Kantitatearen eskaera eta balioztatzea
 						boolean balJostKop = true;
 						do {
 							System.out.print("Zenbat? ");
@@ -528,7 +583,7 @@ public class Aplikazioa {
 							}
 						} while (balJostKop == false);
 
-						// Acumula el subtotal devuelto por el método jostailuak()
+						// jostailuak() metodoak itzulitako azpitotala metatzen du
 						subtotalGuztira += jostailuak(jost, kop);
 						System.out.println(
 								"\n--> Produktua saskira gehitu da! Uneko azpitotala: " + subtotalGuztira + "€");
@@ -538,13 +593,13 @@ public class Aplikazioa {
 						limpiarConsola();
 						break;
 
-					// Subopción 2.3: Comida
+					// 2.3 Azpiazalpena: Janaria
 					case 3:
 						boolean balmenu6 = true;
 						int janaria = 0;
 						kop = 0;
 
-						// Selección del tipo de comida
+						// Janari motaren aukeraketa
 						do {
 							System.out.println("|----------------" + COLOR_1 + " JANARIA " + RESET + "-----------------| ");
 							System.out.println("|==========================================|" + RESET);
@@ -579,7 +634,7 @@ public class Aplikazioa {
 							break;
 						}
 
-						// Solicitud y validación de cantidad
+						// Kantitatearen eskaera eta balioztatzea
 						boolean balmenu7 = true;
 						do {
 							System.out.print("Zenbat? ");
@@ -593,7 +648,7 @@ public class Aplikazioa {
 							}
 						} while (balmenu7 == false);
 
-						// Acumula el subtotal devuelto por el método janaria()
+						// janaria() metodoak itzulitako azpitotala metatzen du
 						subtotalGuztira += janaria(janaria, kop);
 						System.out.println(
 								"\n--> Produktua saskira gehitu da! Uneko azpitotala: " + subtotalGuztira + "€");
@@ -603,20 +658,20 @@ public class Aplikazioa {
 						limpiarConsola();
 						break;
 
-					// Subopción 2.4: Terminar la compra y proceder al pago
+					// 2.4 Azpiazalpena: Erosketa amaitu eta ordainketara igaro
 					case 4:
-						jarraitu = 'E'; // Marca 'E' (Ez / No) para romper el bucle de compras
+						jarraitu = 'E'; // 'E' (Ez) markatzen du erosketen begizta hautasteko
 						break;
 					}
 
-					// Si el usuario decide no seguir comprando, sale del bucle de productos
+					// Erabiltzaileak gehiago ez erostea erabakitzen badu, produktuen begiztatik ateratzen da
 					if (jarraitu == 'E' || jarraitu == 'e') {
 						break;
 					}
 
 				} while (aukera2 != 4);
 
-				// Si hay compras registradas, emitimos la factura final
+				// Erosketak erregistratuta badaude, azken faktura igortzen dugu
 				if (subtotalGuztira > 0) {
 					fakturaErakutsi(subtotalGuztira, teklatua);
 				} else {
@@ -625,14 +680,14 @@ public class Aplikazioa {
 				break;
 
 			// -------------------------------------------------------------
-			// OPCIÓN 3: Servicios de la protectora
+			// 3. AUKERA: Babesetxearen zerbitzuak
 			// -------------------------------------------------------------
 			case 3:
 				int aukera3 = 0;
 				boolean balmenu8 = true;
 
 				do {
-					// Menú secundario para la gestión de servicios
+					// Zerbitzuak kudeatzeko bigarren mailako menua
 					do {
 						System.out.println("|---------------" + COLOR_1 + " ZERBITZUAK " + RESET + "---------------|");
 						System.out.println("|==========================================|" + RESET);
@@ -658,9 +713,9 @@ public class Aplikazioa {
 					//while (!balmenu8); 
 
 					switch (aukera3) {
-					// Subopción 3.1: Dar en adopción (dar de alta un nuevo animal)
+					// 3.1 Azpiazalpena: Adopzioan eman (animalia berri bati alta eman)
 					case 1:
-					    // Buscar la primera posición libre en los arrays
+					    // Array-etan lehenengo posizio librea bilatu
 					    int pos = -1;
 					    for (int i = 0; i < animaliizena.length; i++) {
 					        if (animaliizena[i] == null) {
@@ -669,7 +724,7 @@ public class Aplikazioa {
 					        }
 					    }
 
-					    // Comprobar si hay espacio disponible en los arrays
+					    // Array-etan lekua libre dagoen egiaztatu
 					    if (pos == -1) {
 					        System.out.println("Ezin da animalia gehiago gehitu (zerrenda beteta dago).");
 					        break;
@@ -681,7 +736,7 @@ public class Aplikazioa {
 					    System.out.print("Sartu animali mota -> ");
 					    String animali = teklatua.nextLine();
 
-					    // Captura y validación entera de la edad del animal
+					    // Animaliaren adinaren zenbaki osoaren harrapaketa eta balioztatzea
 					    String adi = "";
 					    boolean balidazio = true;
 					    do {
@@ -696,35 +751,74 @@ public class Aplikazioa {
 					        }
 					    } while (!balidazio);
 
-					    System.out.print("Sartu animali arraza edo kolorea -> ");
-					    String arrazaani = teklatua.nextLine();
 
-					    // Guardar los datos en el índice asignado y generar el ID en orden secuencial
+						String arrazaani = "";
+						boolean balidazioArraza = false;
+
+						do {
+							System.out.print("Sartu animali arraza edo kolorea -> ");
+							arrazaani = teklatua.nextLine().trim();
+
+							try {
+								if (arrazaani.isEmpty() || !arrazaani.matches("[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\\s]+")) {
+									throw new IllegalArgumentException();
+								}
+
+								balidazioArraza = true;
+
+							} catch (IllegalArgumentException e) {
+								System.out.println("Errorea! Testua bakarrik sartu behar duzu.");
+								balidazioArraza = false;
+							}
+
+						} while (!balidazioArraza);
+
+					    // Datuak esleitutako indizean gorde eta IDa sekuentzialki sortu
 					    animaliizena[pos] = izena;
 					    animaliamota[pos] = animali;
 					    adina[pos] = adi;
 					    arraza[pos] = arrazaani;
 					    animaliid[pos] = String.format("ID-%03d", pos + 1);
 					    break;
-					// Subopción 3.2: Adoptar (eliminar animal asignando null a sus datos)
-					case 2:
-						animaliakerakutsi(animaliid, animaliamota, adina, arraza, animaliizena);
-						System.out.print("Zein adoptatu nahi duzu? ");
-						String izenaani = teklatua.nextLine();
+					// 3.2 Azpiazalpena: Adoptatu (animalia ezabatu bere datuei null esleituz)
 
-						// Buscamos por nombre y ponemos a null todos sus atributos
-						for (int i = 0; i < animaliizena.length; i++) {
-							if (izenaani.equalsIgnoreCase(animaliizena[i])) {
-								animaliid[i] = null;
-								animaliamota[i] = null;
-								adina[i] = null;
-								arraza[i] = null;
-								animaliizena[i] = null;
+					case 2:
+
+						animaliakerakutsi(animaliid, animaliamota, adina, arraza, animaliizena);
+
+						boolean aurkitua = false;
+
+						do {
+							System.out.print("Zein adoptatu nahi duzu? ");
+							String izenaani = teklatua.nextLine().trim();
+
+							for (int i = 0; i < animaliizena.length; i++) {
+
+								if (animaliizena[i] != null && izenaani.equalsIgnoreCase(animaliizena[i])) {
+
+									System.out.println("Animalia aurkitu da eta adoptatua izan da.");
+
+									// Animalia ezabatu bere datuak null jarriz
+									animaliid[i] = null;
+									animaliamota[i] = null;
+									adina[i] = null;
+									arraza[i] = null;
+									animaliizena[i] = null;
+
+									aurkitua = true;
+									break;
+								}
 							}
-						}
+
+							if (!aurkitua) {
+								System.out.println("Animalia ez da aurkitu. Saiatu berriro.");
+							}
+
+						} while (!aurkitua);
+
 						break;
 
-					// Subopción 3.3: Cambiar la edad de un animal existente
+					// 3.3 Azpiazalpena: Lehendik dagoen animalia baten adina aldatu
 					case 3:
 						izenadina(animaliizena, adina);
 						System.out.print("Aukeratu animalia: ");
@@ -736,7 +830,7 @@ public class Aplikazioa {
 				break;
 			}
 
-		} while (aukera != 4); // El programa finaliza al seleccionar 4 en el menú principal
+		} while (aukera != 4); // Programa amaitu egiten da menu nagusian 4 aukeratzean
 		try {
 		System.out.println("                       ;\\\r\n"
 				+ "                      |' \\\r\n"
@@ -767,7 +861,7 @@ public class Aplikazioa {
             Thread.currentThread().interrupt(); 
         }
 
-		teklatua.close(); // Cerramos el Scanner
+		teklatua.close(); // Scanner-a ixten dugu
 		System.exit(0);
 	}
 }

@@ -2,6 +2,9 @@
 title BigarrenAukera.Launcher
 cls
 
+:: Establece la carpeta del .bat como directorio de trabajo
+cd /d "%~dp0"
+
 javac Erronka\Aplikazioa.java
 
 if %errorLevel% neq 0 (
@@ -12,4 +15,5 @@ if %errorLevel% neq 0 (
 
 java -Xmx128m Erronka/Aplikazioa
 
+:FIN
 pause
